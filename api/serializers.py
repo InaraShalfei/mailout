@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.models import Client, MailOut
+from api.models import Client, MailOut, Message
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -18,3 +18,10 @@ class MailOutSerializer(serializers.ModelSerializer):
     class Meta:
         model = MailOut
         fields = ('id', 'start_time', 'finish_time', 'text', 'filter')
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    client = ClientSerializer()
+    class Meta:
+        model = Message
+        fields = ('creation_time', 'status', 'client')
