@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.models import Client
+from api.models import Client, MailOut
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -12,3 +12,9 @@ class ClientSerializer(serializers.ModelSerializer):
         data['operator_code'] = data['phone_number'][1:4]
 
         return super(ClientSerializer, self).to_internal_value(data)
+
+
+class MailOutSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MailOut
+        fields = ('id', 'start_time', 'finish_time', 'text', 'filter')
