@@ -2,12 +2,23 @@ import pytz as pytz
 from django.db import models
 from django.core.validators import RegexValidator
 
+from api.validators import JSONSchemaValidator
+
+MAILOUT_FILTER_FIELD_SCHEMA = {
+    'type': 'object',
+    'properties': {
+        'tag': {'type': 'string'},
+        'operator_code': {'type': 'string'}
+    }
+}
+
 
 class MailOut(models.Model):
     start_time = models.DateTimeField(verbose_name='время запуска рассылки')
     finish_time = models.DateTimeField(verbose_name='время окончания рассылки')
     text = models.TextField(verbose_name='текст сообщения')
-    filter = models.JSONField(default=dict,
+    filter = models.JSONField(default=dict, validators=[JSONSchemaValidator(
+        limit_value=MAILOUT_FILTER_FIELD_SCHEMA)],
                               verbose_name='фильтр свойств рассылки')
 
     class Meta:
