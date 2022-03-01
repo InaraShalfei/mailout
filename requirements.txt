@@ -1,9 +1,16 @@
 asgiref==3.5.0
+attrs==21.4.0
 backports.zoneinfo==0.2.1
 Django==4.0.2
 django-filter==21.1
 djangorestframework==3.13.1
+future==0.18.2
+importlib-resources==5.4.0
+jsonschema==4.4.0
 pkg_resources==0.0.0
+pyrsistent==0.18.1
 python-dotenv==0.19.2
 pytz==2021.3
+serializers==0.2.4
 sqlparse==0.4.2
+zipp==3.7.0
