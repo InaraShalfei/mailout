@@ -20,7 +20,7 @@ class Client(models.Model):
         regex=r'^7[0-9]{10,10}$')],
         verbose_name='номер телефона клиента')
     operator_code = models.CharField(max_length=3, validators=[
-                RegexValidator(regex=r'^7[0-9]{3,3}$')],
+                RegexValidator(regex=r'^[0-9]{3,3}$')],
         verbose_name='код мобильного оператора')
     tag = models.CharField(max_length=50, verbose_name='произвольная метка')
     timezone = models.CharField(max_length=32, choices=TIMEZONES,
