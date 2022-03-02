@@ -15,8 +15,7 @@ def process_planned_message(pk):
         message.status = 'is_cancelled'
         message.save()
         return
-    send_message = SendMessage()
-    successful = send_message.send_message(message)
+    successful = send_message(message)
     if successful:
         message.status = 'is_sent'
     else:
@@ -24,23 +23,20 @@ def process_planned_message(pk):
     message.save()
 
 
-class SendMessage:
-    def send_message(self, message):
-        try:
-            data = {
-                'id': message.id,
-                'phone': int(message.client.phone_number),
-                'text': message.mailout.text
-            }
-            response = requests.post(
-                f'https://probe.fbrq.cloud/v1/send/{message.id}',
-                data=json.dumps(data),
-                headers={'Authorization': f'Bearer {os.getenv("TOKEN")}'})
-            if response.json().get('message') != 'OK':
-                return False
-            return True
-        except:
-            return False
+def send_message(self, message):
+    try:
+        data = {
+            'id': message.id,
+            'phone': int(message.client.phone_number),
+            'text': message.mailout.text
+        }
+        response = requests.post(
+            f'https://probe.fbrq.cloud/v1/send/{message.id}',
+            data=json.dumps(data),
+            headers={'Authorization': f'Bearer {os.getenv("TOKEN")}'})
+        return response.json().get('message') == 'OK'
+    except:
+        return False
 
 
 class MailoutService:
