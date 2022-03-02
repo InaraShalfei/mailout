@@ -1,42 +1,5 @@
-import json
-import os
-from dotenv import load_dotenv
-import requests
-from django.utils import timezone
-
 from api.models import Client, Message
-
-load_dotenv()
-
-
-def process_planned_message(pk):
-    message = Message.objects.get(id=pk)
-    if message.mailout.finish_time < timezone.now():
-        message.status = 'is_cancelled'
-        message.save()
-        return
-    successful = send_message(message)
-    if successful:
-        message.status = 'is_sent'
-    else:
-        message.status = 'error'
-    message.save()
-
-
-def send_message(self, message):
-    try:
-        data = {
-            'id': message.id,
-            'phone': int(message.client.phone_number),
-            'text': message.mailout.text
-        }
-        response = requests.post(
-            f'https://probe.fbrq.cloud/v1/send/{message.id}',
-            data=json.dumps(data),
-            headers={'Authorization': f'Bearer {os.getenv("TOKEN")}'})
-        return response.json().get('message') == 'OK'
-    except:
-        return False
+from mailout.tasks import send_delayed_message
 
 
 class MailoutService:
@@ -46,7 +9,7 @@ class MailoutService:
             message = Message.objects.create(client=client,
                                              status='is_planned',
                                              mailout=mailout)
-            process_planned_message(message.id)
+            send_delayed_message.delay(message.id)
 
     def get_clients(self, mailout):
         operator_code = mailout.filter.get('operator_code')
