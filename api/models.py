@@ -22,7 +22,7 @@ class MailOut(models.Model):
                               verbose_name='фильтр свойств рассылки')
 
     class Meta:
-        ordering = ('start_time', )
+        ordering = ('id', )
 
 
 class Client(models.Model):
@@ -38,7 +38,7 @@ class Client(models.Model):
                                 default='UTC', verbose_name='часовой пояс')
 
     class Meta:
-        ordering = ('phone_number', )
+        ordering = ('id', )
 
     def __str__(self):
         return self.tag
@@ -47,9 +47,10 @@ class Client(models.Model):
 class Message(models.Model):
     STATUSES = [('is_planned', 'planned'),
                 ('is_sent', 'sent'),
-                ('is_delivered', 'delivered'),
+                ('cancelled', 'cancelled'),
                 ('error', 'error')]
-    creation_time = models.DateTimeField(verbose_name='время создания')
+    creation_time = models.DateTimeField(auto_now_add=True,
+                                         verbose_name='время создания')
     status = models.CharField(max_length=50, choices=STATUSES,
                               verbose_name='статус отправки')
     mailout = models.ForeignKey(MailOut, on_delete=models.CASCADE,
@@ -60,7 +61,7 @@ class Message(models.Model):
                                verbose_name='id клиента')
 
     class Meta:
-        ordering = ('-creation_time', )
+        ordering = ('id', )
 
     def __str__(self):
         return self.status
