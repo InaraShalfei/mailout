@@ -3,6 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.serializers import ListSerializer
 
+from django.db.models import Count
+
 from api.models import Client, MailOut, Message
 from api.serializers import ClientSerializer, MailOutSerializer, \
     MessageSerializer
@@ -25,3 +27,10 @@ class MailOutViewSet(viewsets.ModelViewSet):
                                     context=self.get_serializer_context())
         return Response(serializer.to_representation(messages),
                         status=status.HTTP_200_OK)
+
+    @action(detail=True, url_path='statistics')
+    def get_statistics(self, request, pk):
+        mailout = MailOut.objects.get(id=pk)
+        result = mailout.messages.all().values('status').annotate(
+            count=Count('mailout')).order_by()
+        return Response(result, status=status.HTTP_200_OK)
