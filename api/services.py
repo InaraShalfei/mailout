@@ -1,8 +1,12 @@
-import time
-
+import json
+import os
+from dotenv import load_dotenv
+import requests
 from django.utils import timezone
 
 from api.models import Client, Message
+
+load_dotenv()
 
 
 def process_planned_message(pk):
@@ -18,17 +22,30 @@ def process_planned_message(pk):
 
 
 class SendMessage:
-    def send_message(self, phone_number, text):
-        print(f'Message "{text}" for {phone_number}')
-        # TODO use external API for sending messages
+    def send_message(self, message):
+        data = {
+            "id": message.id,
+            "phone": int(message.client.phone_number),
+            "text": message.mailout.text
+        }
+        response = requests.post(
+            f'https://probe.fbrq.cloud/v1/send/{message.id}',
+            data=json.dumps(data),
+            headers={'Authorization': f'Bearer {os.getenv("TOKEN")}'})
+
+# парсить response.text ({"code":0,"message":"OK"}) и если message=OK return true, else - return false
+        # try/except В except return False
+
+        return response.status_code
 
 
 class MailoutService:
     def process(self, mailout):
         clients = self.get_clients(mailout)
         for client in clients:
-            message = Message.objects.create(client=client, status='is_planned',
-                                   mailout=mailout)
+            message = Message.objects.create(client=client,
+                                             status='is_planned',
+                                             mailout=mailout)
             process_planned_message(message.id)
 
     def get_clients(self, mailout):
