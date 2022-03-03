@@ -19,7 +19,7 @@ class MailOut(models.Model):
     text = models.TextField(verbose_name='текст сообщения')
     filter = models.JSONField(default=dict, validators=[JSONSchemaValidator(
         limit_value=MAILOUT_FILTER_FIELD_SCHEMA)],
-                              verbose_name='фильтр свойств рассылки')
+        verbose_name='фильтр свойств рассылки')
 
     class Meta:
         ordering = ('id', )
@@ -30,9 +30,8 @@ class Client(models.Model):
     phone_number = models.CharField(max_length=11, validators=[RegexValidator(
         regex=r'^7[0-9]{10,10}$')],
         verbose_name='номер телефона клиента')
-    operator_code = models.CharField(max_length=3, validators=[
-                RegexValidator(regex=r'^[0-9]{3,3}$')],
-        verbose_name='код мобильного оператора')
+    operator_code = models.CharField(max_length=3, validators=[RegexValidator(
+        regex=r'^[0-9]{3,3}$')], verbose_name='код мобильного оператора')
     tag = models.CharField(max_length=50, verbose_name='произвольная метка')
     timezone = models.CharField(max_length=32, choices=TIMEZONES,
                                 default='UTC', verbose_name='часовой пояс')
