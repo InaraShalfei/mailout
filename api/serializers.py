@@ -1,9 +1,10 @@
+import pytz as pytz
 from django.utils import timezone
 
 from rest_framework import serializers
 
 from api.models import Client, MailOut, Message
-from api.services import MailoutService
+from mailout.tasks import process_delayed_mailout
 
 
 class ClientSerializer(serializers.ModelSerializer):
@@ -23,8 +24,13 @@ class MailOutSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         mailout = super().create(validated_data)
-        if mailout.start_time < timezone.now() < mailout.finish_time:
-            MailoutService().process(mailout)
+        if (mailout.start_time.astimezone(pytz.utc) < timezone.now()
+                < mailout.finish_time.astimezone(pytz.utc)):
+            process_delayed_mailout.delay(mailout.id)
+        elif mailout.start_time.astimezone(pytz.utc) > timezone.now():
+            process_delayed_mailout.apply_async(
+                args=[mailout.id],
+                eta=mailout.start_time.astimezone(pytz.utc))
         return mailout
 
 

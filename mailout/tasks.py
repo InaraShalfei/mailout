@@ -1,7 +1,7 @@
+from api.services import process_planned_mailout
 from .celery import app
-from mailout.send_message import process_planned_message
 
 
 @app.task
-def send_delayed_message(pk):
-    process_planned_message(pk)
+def process_delayed_mailout(pk):
+    process_planned_mailout(pk)

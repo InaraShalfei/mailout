@@ -5,9 +5,9 @@ from rest_framework.serializers import ListSerializer
 
 from django.db.models import Count
 
-from api.models import Client, MailOut, Message
-from api.serializers import ClientSerializer, MailOutSerializer, \
-    MessageSerializer
+from api.models import Client, MailOut
+from api.serializers import (ClientSerializer, MailOutSerializer,
+                             MessageSerializer)
 
 
 class ClientViewSet(viewsets.ModelViewSet):

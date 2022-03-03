@@ -1,5 +1,5 @@
-from api.models import Client, Message
-from mailout.tasks import send_delayed_message
+from api.models import Client, Message, MailOut
+from mailout.send_message import process_planned_message
 
 
 class MailoutService:
@@ -9,7 +9,7 @@ class MailoutService:
             message = Message.objects.create(client=client,
                                              status='is_planned',
                                              mailout=mailout)
-            send_delayed_message.delay(message.id)
+            process_planned_message(message)
 
     def get_clients(self, mailout):
         operator_code = mailout.filter.get('operator_code')
@@ -21,3 +21,9 @@ class MailoutService:
             clients = clients.filter(tag=tag)
 
         return clients.all()
+
+
+def process_planned_mailout(pk):
+    mailout = MailOut.objects.get(id=pk)
+    mailout_service = MailoutService()
+    mailout_service.process(mailout)

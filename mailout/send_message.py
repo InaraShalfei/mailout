@@ -1,18 +1,17 @@
 import json
 import os
+
+import pytz as pytz
 from dotenv import load_dotenv
 import requests
 from django.utils import timezone
-
-from api.models import Message
 
 
 load_dotenv()
 
 
-def process_planned_message(pk):
-    message = Message.objects.get(id=pk)
-    if message.mailout.finish_time < timezone.now():
+def process_planned_message(message):
+    if message.mailout.finish_time.astimezone(pytz.utc) < timezone.now():
         message.status = 'is_cancelled'
         message.save()
         return
@@ -36,5 +35,6 @@ def send_message(message):
             data=json.dumps(data),
             headers={'Authorization': f'Bearer {os.getenv("TOKEN")}'})
         return response.json().get('message') == 'OK'
-    except:
+    except Exception as e:
+        print(e.args)
         return False
