@@ -17,8 +17,14 @@ services:
     restart: always
     depends_on:
       - db
+      - rabbitmq
     env_file:
       - ./.env
+
+  rabbitmq:
+    image: 'bitnami/rabbitmq:latest'
+    ports:
+      - 5672:5672
 
   nginx:
     image: nginx:1.19.3
