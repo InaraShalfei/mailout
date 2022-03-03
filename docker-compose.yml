@@ -21,6 +21,17 @@ services:
     env_file:
       - ./.env
 
+  celery:
+    build:
+      context: .
+      dockerfile: CeleryDockerfile
+    restart: always
+    depends_on:
+      - web
+      - rabbitmq
+    env_file:
+      - ./.env
+
   rabbitmq:
     image: 'bitnami/rabbitmq:latest'
     ports:
