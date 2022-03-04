@@ -15,7 +15,7 @@ http://85.143.172.31/
 
 OpenAPI (Swagger)
 ```
-spec:https://85.143.172.31/docs/
+http://85.143.172.31/docs/
 ```
 
 ## Postman Collection
