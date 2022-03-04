@@ -1,0 +1,395 @@
+openapi: 3.1.0
+info:
+  version: "1.0.0"
+  title: "Mailout"
+host: "85.143.172.31"
+basePath: "/api"
+tags:
+- name: "clients"
+  description: "Everything about your Clients"
+- name: "mailouts"
+  description: "Everything about your Mailouts"
+schemes:
+- "http"
+paths:
+  /clients/{clientId}:
+    get:
+      tags:
+      - "clients"
+      summary: "Find client by ID"
+      description: "Returns a single client"
+      operationId: "getClientById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "clientId"
+        in: "path"
+        description: "ID of client to return"
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Client"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Client not found"
+    delete:
+      tags:
+      - "clients"
+      summary: "Deletes a client"
+      description: ""
+      operationId: "deleteClient"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "clientId"
+        in: "path"
+        description: "Client id to delete"
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "201":
+          description: "successful operation"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Client not found"
+    put:
+      tags:
+      - "clients"
+      summary: "Update existing client by ID"
+      description: "Returns a single client"
+      operationId: "updateClientById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "clientId"
+        in: "path"
+        description: "ID of client to return"
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Client"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Client not found"
+  /clients/:
+    post:
+      tags:
+      - "clients"
+      summary: "Add a new client"
+      description: ""
+      operationId: "addClient"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: query
+        name: "body"
+        description: "Client object that needs to be added"
+        required: true
+        schema:
+          type: object
+          properties:
+                phone_number:          
+                  type: string
+                tag:    
+                  type: string
+                timezone:
+                  type: string
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Client"
+        "405":
+          description: "Invalid input"
+    get:
+      tags:
+      - "clients"
+      summary: "Get list of existing clients"
+      operationId: "getListofClients"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                phone_number:
+                  type: string
+                operator_code:
+                  type: string
+                tag:
+                  type: string
+                timezone:
+                  type: string
+  /mailouts/{mailoutId}:
+    get:
+      tags:
+      - "mailouts"
+      summary: "Find mailout by ID"
+      description: "Returns a single mailout"
+      operationId: "getMailoutById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "mailoutId"
+        in: "path"
+        description: "ID of mailout to return"
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Mailout"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Mailout not found"
+    delete:
+      tags:
+      - "mailouts"
+      summary: "Deletes a mailout"
+      description: ""
+      operationId: "deleteMailout"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "mailoutId"
+        in: "path"
+        description: "Mailout id to delete"
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "201":
+          description: "successful operation"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Mailout not found"
+    put:
+      tags:
+      - "mailouts"
+      summary: "Update existing mailout by ID"
+      description: "Returns a single client"
+      operationId: "updateMailoutById"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "mailoutId"
+        in: "path"
+        description: "ID of mailout to return"
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Mailout"
+        "400":
+          description: "Invalid ID supplied"
+        "404":
+          description: "Mailout not found"
+  /mailouts/:
+    post:
+      tags:
+      - "mailouts"
+      summary: "Add a new mailout"
+      description: ""
+      operationId: "addMailout"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: query
+        name: "body"
+        description: "Mailout object that needs to be added"
+        required: true
+        schema:
+          type: object
+          properties:
+                start_date:          
+                  type: string
+                finish_date:          
+                  type: string
+                text:    
+                  type: string
+                filter:
+                  type: object
+                  properties:
+                    tag:
+                      type: string
+                    operator_code:
+                      type: string
+      responses:
+        "201":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Mailout"
+        "405":
+          description: "Invalid input"
+    get:
+      tags:
+      - "mailouts"
+      summary: "Get list of existing mailouts"
+      operationId: "getListofMailouts"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              properties:
+                id:
+                  type: integer
+                start_date:
+                  type: string
+                finish_date:
+                  type: string
+                text:
+                  type: string
+                filter:
+                  type: object
+                  properties:
+                    tag:
+                      type: string
+                    operator_code:
+                      type: string
+  /mailouts/{mailoutId}/messages:
+    get:
+      tags:
+      - "mailouts"
+      summary: "Get list of messages by mailout ID"
+      operationId: "getmessagesByMailoutId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "mailoutId"
+        in: "path"
+        description: "ID of mailout to get list of messages"
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Message"
+        "400":
+          description: "Invalid ID supplied"
+  /mailouts/{mailoutId}/statistics:
+    get:
+      tags:
+      - "mailouts"
+      summary: "Get statistics of message statuses by mailout ID"
+      operationId: "getstatisticsByMailoutId"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "mailoutId"
+        in: "path"
+        description: "ID of mailout to get list of messages"
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: "successful operation"
+          schema:
+            type: array
+            items:
+              properties:
+                status:
+                  type: string
+                count:
+                  type: integer
+        "400":
+          description: "Invalid ID supplied"
+definitions:
+  Mailout:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      start_time:
+        format: datetime
+        type: string
+      finish_time:
+        format: datetime
+        type: string
+      text:
+        type: string
+      filter:
+        type: object
+        properties:
+          tag:
+            type: string
+          operator_code:
+            type: string
+            
+  Message:
+    type: object
+    properties:
+      creation_time:
+        format: datetime
+        type: string
+      status:
+        type: string
+      client:
+        type: object
+        properties:
+          id:
+            type: integer
+          phone_number:
+            type: string
+          operator_code:
+            type: string
+          tag:
+            type: string
+          timezone:
+            type: string
+            
+  Client:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      phone_number:
+        type: string
+      operator_code:
+        type: string
+      tag:
+        type: string
+      timezone:
+        type: string
