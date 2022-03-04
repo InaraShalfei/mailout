@@ -3,7 +3,7 @@ from django.utils import timezone
 
 from rest_framework import serializers
 
-from api.models import Client, MailOut, Message
+from api.models import Client, MailOut, Message, MAILOUT_FILTER_FIELD_SCHEMA
 from mailout.tasks import process_delayed_mailout
 
 
@@ -17,7 +17,14 @@ class ClientSerializer(serializers.ModelSerializer):
         return super(ClientSerializer, self).to_internal_value(data)
 
 
+class MailoutFilterField(serializers.JSONField):
+    class Meta:
+        swagger_schema_fields = MAILOUT_FILTER_FIELD_SCHEMA
+
+
 class MailOutSerializer(serializers.ModelSerializer):
+    filter = MailoutFilterField()
+
     class Meta:
         model = MailOut
         fields = ('id', 'start_time', 'finish_time', 'text', 'filter')
