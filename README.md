@@ -7,11 +7,16 @@
 
 http://85.143.172.31/
 
+## Дополнительные пункты задания
+- подготовить docker-compose для запуска всех сервисов проекта одной командой
+- 
+сделать так, чтобы по адресу /docs/ открывалась страница со drf_yasg UI и в нём отображалось описание разработанного API.
+
 ## Существующие эндпоинты
 
 OpenAPI (Swagger)
 ```
-spec:https://gist.github.com/luckytypr/97aacca6bf497ec7fcfa55f60bb4b17b
+spec:https://85.143.172.31/docs/
 ```
 
 ## Postman Collection
