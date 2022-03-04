@@ -3,4 +3,4 @@ WORKDIR /code
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 COPY . .
-CMD export DJANGO_SETTINGS_MODULE="mailout.settings"; celery -A mailout worker --loglevel=DEBUG
+CMD export DJANGO_SETTINGS_MODULE="mailout.settings"; celery -A mailout worker --loglevel=INFO
